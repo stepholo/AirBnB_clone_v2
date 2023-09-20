@@ -117,7 +117,7 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
-    def do_create(args):
+    def do_create(self, args):
         """ Create an object of any class"""
         ignored_attrs = ('id', 'created_at', 'updated_at', '__class__')
         class_name = ''
@@ -155,7 +155,7 @@ class HBNBCommand(cmd.Cmd):
         if not class_name:
             print("** class name missing **")
             return
-        elif class_name not in HBNBCommand.classes:
+        elif class_name not in self.classes:
             print("** class doesn't exist **")
             return
         if os.getenv('HBNB_TYPE_STORAGE') == 'db':
