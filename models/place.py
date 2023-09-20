@@ -50,16 +50,17 @@ class Place(BaseModel, Base):
                     lst.append(rev)
             return lst
 
-            @property
-            def amenities(self):
-                """Get/set linked Amenities."""
-                amenity_list = []
-                for amenity in list(models.storage.all(Amenity).values()):
-                    if amenity.id in self.amenity_ids:
-                        amenity_list.append(amenity)
-                return amenity_list
 
-            @amenities.setter
-            def amenities(self, value):
-                if type(value) == Amenity:
-                    self.amenity_ids.append(value.id)
+        @property
+        def amenities(self):
+            """Get/Set linked amenities."""
+            amenity_list = []
+            for amenity in list(models.storage.all(Amenity).values()):
+                if amenity.id in self.amenity_ids:
+                    amenity_list.append(amenity)
+            return amenity_list
+
+        @amenities.setter
+        def amenities(self, value):
+            if type(value) == Amenity:
+                self.amenity_ids.append(value.id)
