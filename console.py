@@ -16,7 +16,7 @@ class HBNBCommand(cmd.Cmd):
     """ Contains the functionality for the HBNB console"""
 
     # determines prompt for interactive/non-interactive modes
-    prompt = '(hbnb) ' #if sys.__stdin__.isatty() else
+    prompt = '(hbnb) ' #if sys.__stdin__.isatty() else ''
 
     classes = {
                'BaseModel': BaseModel, 'User': User, 'Place': Place,
@@ -30,10 +30,10 @@ class HBNBCommand(cmd.Cmd):
              'latitude': float, 'longitude': float
             }
 
-    """def preloop(self):
-        Prints if isatty is false
-        if not sys.__stdin__.isatty():
-            print('(hbnb) '"""
+    #def preloop(self):
+    #   """Prints if isatty is false"""
+    #   if not sys.__stdin__.isatty():
+    #       print('(hbnb)')
 
     def precmd(self, line):
         """Reformat command line for advanced command syntax.
@@ -86,11 +86,11 @@ class HBNBCommand(cmd.Cmd):
         finally:
             return line
 
-    """def postcmd(self, stop, line):
-        Prints if isatty is false
-        if not sys.__stdin__.isatty():
-            print('(hbnb) ', end='')
-        return stop"""
+    #def postcmd(self, stop, line):
+    #    """Prints if isatty is false"""
+    #    if not sys.__stdin__.isatty():
+    #        print('(hbnb) ', end='')
+    #    return stop
 
     def do_quit(self, command):
         """ Method to exit the HBNB console"""
@@ -121,8 +121,8 @@ class HBNBCommand(cmd.Cmd):
             my_list = line.split(" ")
 
             kwargs = {}
-            for j in range(1, len(my_list)):
-                key, value = tuple(my_list[j].split("="))
+            for i in range(1, len(my_list)):
+                key, value = tuple(my_list[i].split("="))
                 if value[0] == '"':
                     value = value.strip('"').replace("_", " ")
                 else:
@@ -131,7 +131,6 @@ class HBNBCommand(cmd.Cmd):
                     except (SyntaxError, NameError):
                         continue
                 kwargs[key] = value
-
             if kwargs == {}:
                 obj = eval(my_list[0])()
             else:
@@ -139,12 +138,12 @@ class HBNBCommand(cmd.Cmd):
                 storage.new(obj)
             print(obj.id)
             obj.save()
-        
+
         except SyntaxError:
             print("** class name missing **")
         except NameError:
-            print("** calss doesn't exist **")
-
+            print("** class doesn't exist **")
+    
     def help_create(self):
         """ Help information for the create method """
         print("Creates a class of any type")
