@@ -9,19 +9,18 @@ import models
 from os import getenv
 
 association_table = Table("place_amenity", Base.metadata,
-                          Column("place_id", String(60), 
-                                 ForeignKey("places.id"), 
-                                 primary_key=True, nullable=False), 
-                          Column("amenity_id", String(60), 
-                                 ForeignKey("amenities.id"), 
+                          Column("place_id", String(60),
+                                 ForeignKey("places.id"),
+                                 primary_key=True, nullable=False),
+                          Column("amenity_id", String(60),
+                                 ForeignKey("amenities.id"),
                                  primary_key=True, nullable=False))
+
 
 class Place(BaseModel, Base):
     """ A place to stay """
 
     __tablename__ = 'places'
-    
-
     city_id = Column(String(60), ForeignKey('cities.id'), nullable=False)
     user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
     name = Column(String(128), nullable=False)
@@ -49,7 +48,6 @@ class Place(BaseModel, Base):
                 if rev.place_id == self.id:
                     lst.append(rev)
             return lst
-
 
         @property
         def amenities(self):
