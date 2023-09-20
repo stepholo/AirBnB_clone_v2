@@ -3,6 +3,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from models.base_model import Base
 
+
 class DBStorage:
     """Database storage engine for mysql storage"""
     __engine = None
@@ -28,31 +29,21 @@ class DBStorage:
         """
         if cls is None:
             # Query all classes
-            classes = [State, City, User, Place, Review, Amenity]
+            objs = self.__session.query(State).all()
+            objs.extend(self.__session.query(City).all())
+            objs.extend(self.__session.query(User).all())
+            objs.extend(self.__session.query(Place).all())
+            objs.extend(self.__session.query(Review).all())
+            objs.extend(self.__session.query(Amenity).all())
         else:
-            if isinstance(cls, str):
+            if type(cls) == str:
                 cls = eval(cls)
-            classes = [cls]
-
-        result = {}
-        for cls in classes:
-            objects = self.__session.query(cls).all()
-            for obj in objects:
-                key = "{}.{}".format(cls.__name__, obj.id)
-                result[key] = obj
-
-        return result
+            obj = self.__session.query(cls)
+        return {"{}.{}".format(type(o).__name__, o.id): o for o in objs}
 
     def new(self, obj):
         """adds the obj to the current db session"""
-        if obj is not None:
-            try:
-                self.__session.add(obj)
-                self.__session.flush()
-                self.__session.refresh(obj)
-            except Exception as e:
-                self.__session.rollback()
-                raise e
+        self.__session.add(obj)
 
     def save(self):
         """commit all changes to the current db session"""
@@ -63,8 +54,7 @@ class DBStorage:
             if it's not None
         """
         if obj is not None:
-            self.__session.query(type(obj)).filter(
-                    type(obj).id == obj.id).delete()
+            self.__session.delete(obj)
 
     def reload(self):
         """reloads the database"""
