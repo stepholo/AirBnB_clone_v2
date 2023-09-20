@@ -20,6 +20,9 @@ class Place(BaseModel, Base):
         max_guest = Column(Integer, nullable=False, default=0)
         latitude = Column(Float, nullable=True)
         longitude = Column(Float, nullable=True)
+        reviews = relationship(
+                'Review', backref='place',
+                cascade='all, delete, delete-orphan')
     else:
         city_id = ""
         user_id = ""
@@ -32,3 +35,17 @@ class Place(BaseModel, Base):
         latitude = 0.0
         longitude = 0.0
         amenity_ids = []
+
+    @property
+    def reviews(self):
+        """returns list of reviews instances wiht place_id
+            equals to the current place.id
+            FileStorage relationship between Place and Review
+        """
+        from models import storage
+        all_revs = storage.all(Review)
+        lst = []
+        for rev in all_revs.values():
+            if rev.place_id == self.id:
+                lst.append(rev)
+        return lst
