@@ -53,17 +53,31 @@ class HBNBCommand(cmd.Cmd):
         try:
             if not line:
                 raise SyntaxError()
-            my_list = line.split(" ")
+            
+            words = line.split()
+            class_name = words[0]
+            params = words[1:]
+
+            if class_name not in self.__classes:
+                print("** class doesn't exists **")
+                return
 
             kwargs = {}
-            for i in range(1, len(my_list)):
-                key, value = tuple(my_list[i].split("="))
-                if value[0] == '"':
-                    value = value.strip('"').replace("_", " ")
+            for param in params:
+                parts = param.split("=")
+                if len(parts) != 2:
+                    continue
+                key, value = parts
+
+                if value.startswith('"') and value.endswith('"'):
+                    value = value.strip('"').replace("_", " ").replace('\\"', '"')
                 else:
                     try:
-                        value = eval(value)
-                    except (SyntaxError, NameError):
+                        if '.' in value:
+                            value = float(value)
+                        else:
+                            value = int(value)
+                    except ValueError:
                         continue
                 kwargs[key] = value
 
@@ -72,6 +86,7 @@ class HBNBCommand(cmd.Cmd):
             else:
                 obj = eval(my_list[0])(**kwargs)
                 storage.new(obj)
+
             print(obj.id)
             obj.save()
 
