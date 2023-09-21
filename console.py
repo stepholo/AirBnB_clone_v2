@@ -123,7 +123,7 @@ class HBNBCommand(cmd.Cmd):
             class_name = words[0]
             params = words[1:]
 
-            if class_name not in self.__classes:
+            if class_name not in self.classes:
                 print("** class doesn't exists **")
                 return
 
@@ -294,36 +294,36 @@ class HBNBCommand(cmd.Cmd):
             return
 
 
-    # split args into separate components
-    args = args[2].split()
+        # split args into separate components
+        args = args[2].split()
 
-    # iterate through arguments in pairs (name, value)
-    for i in range(0, len(args), 2):
-        att_name = args[i]
-        if i + 1 < len(args):
-            att_val = args[i + 1]
-        else:
-            att_val = None
+        # iterate through arguments in pairs (name, value)
+        for i in range(0, len(args), 2):
+            att_name = args[i]
+            if i + 1 < len(args):
+                att_val = args[i + 1]
+            else:
+                att_val = None
 
-        if not att_name:
-            print("** attribute name missing **")
-            return
-        if att_val is None:
-            print("** value missing **")
-            return
-
-        # type cast as necessary
-        if att_name in HBNBCommand.types:
-            try:
-                att_val = HBNBCommand.types[att_name](att_val)
-            except ValueError:
-                print(f"Invalid value for attribute '{att_name}'")
+            if not att_name:
+                print("** attribute name missing **")
+                return
+            if att_val is None:
+                print("** value missing **")
                 return
 
-        # update dictionary with name, value pair
-        setattr(storage.all()[key], att_name, att_val)
+            # type cast as necessary
+            if att_name in HBNBCommand.types:
+                try:
+                    att_val = HBNBCommand.types[att_name](att_val)
+                except ValueError:
+                    print("Invalid value for attribute '{}'".format(att_name))
+                    return
 
-    storage.save()  # save updates to file
+            # update dictionary with name, value pair
+            setattr(storage.all()[key], att_name, att_val)
+
+        storage.save()  # save updates to file
 
     
     def help_update(self):
