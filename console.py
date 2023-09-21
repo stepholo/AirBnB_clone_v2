@@ -318,7 +318,7 @@ class HBNBCommand(cmd.Cmd):
                     att_val = HBNBCommand.types[att_name](att_val)
                 except ValueError:
                     print("Invalid value for attribute '{}'".format(att_name))
-                    return
+                return
 
             # update dictionary with name, value pair
             setattr(storage.all()[key], att_name, att_val)
