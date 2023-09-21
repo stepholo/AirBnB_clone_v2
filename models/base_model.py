@@ -19,14 +19,12 @@ class BaseModel:
         updated_at (sqlalchemy DateTime): The datetime of last update.
     """
 
-    id = Column(String(60), primary_key=True, nullable=False)
-    created_at = Column(DateTime, nullable=False, default=datetime.utcnow())
-    updated_at = Column(DateTime, nullable=False, default=datetime.utcnow())
-
     def __init__(self, *args, **kwargs):
         """Instatntiates a new model"""
-        self.id = str(uuid4())
-        self.created_at = self.updated_at = datetime.utcnow()
+        if 'id' not in kwargs:
+            self.id = str(uuid4())
+        if 'created_at' not in kwargs:
+            self.created_at = self.updated_at = datetime.utcnow()
         if kwargs:
             for key, value in kwargs.items():
                 if key == "created_at" or key == "updated_at":
