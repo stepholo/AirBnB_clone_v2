@@ -2,7 +2,6 @@
 """Module to define hello function"""
 
 from flask import Flask
-from markupsafe import escape
 
 app = Flask(__name__)
 
@@ -17,13 +16,6 @@ def hello():
 def hbnb():
     """Function hbnb"""
     return "HBNB"
-
-
-@app.route('/c/<text>', strict_slashes=False)
-def c_text(text):
-    """Function C_text"""
-    formated_text = ' '.join(escape(text).split('_'))
-    return f"C {formated_text}"
 
 
 if __name__ == '__main__':
